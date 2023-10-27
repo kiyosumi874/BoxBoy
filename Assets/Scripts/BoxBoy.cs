@@ -5,6 +5,7 @@ using UnityEngine;
 public class BoxBoy : MonoBehaviour
 {
     [SerializeField] Animator animator;
+    [SerializeField] AudioSource audioSource;
 
     enum AnimationType
     {
@@ -26,99 +27,79 @@ public class BoxBoy : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            StartCoroutine(StartEastAnimation());
+            animationType = AnimationType.East;
+            animator.SetBool("isEast", true);
             return;
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            StartCoroutine(StartWestAnimation());
+            animationType = AnimationType.West;
+            animator.SetBool("isWest", true);
             return;
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            StartCoroutine(StartNorthAnimation());
+            animationType = AnimationType.North;
+            animator.SetBool("isNorth", true);
             return;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            StartCoroutine(StartSouthAnimation());
+            animationType = AnimationType.South;
+            animator.SetBool("isSouth", true);
             return;
         }
     }
 
-    IEnumerator StartEastAnimation()
+    // アニメーション終了時に呼び出される
+    IEnumerator OnEastAnimationExit()
     {
-        animationType = AnimationType.East;
-        animator.SetBool("isEast", true);
-        while (true)
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-            {
-                animator.SetBool("isEast", false);
-                animationType = AnimationType.Idle;
-                var pos = transform.position;
-                pos.x += 1.0f;
-                transform.position = pos;
-                yield break;
-            }
-            yield return null;
-        }
+        // アニメーターの仕様上1フレーム遅らせなければいけない
+        yield return null;
+        animator.SetBool("isEast", false);
+        audioSource.Play();
+        animationType = AnimationType.Idle;
+        var pos = transform.position;
+        pos.x += 1.0f;
+        transform.position = pos;
     }
 
-    IEnumerator StartWestAnimation()
+    // アニメーション終了時に呼び出される
+    IEnumerator OnWestAnimationExit()
     {
-        animationType = AnimationType.West;
-        animator.SetBool("isWest", true);
-        while (true)
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-            {
-                animator.SetBool("isWest", false);
-                animationType = AnimationType.Idle;
-                var pos = transform.position;
-                pos.x -= 1.0f;
-                transform.position = pos;
-                yield break;
-            }
-            yield return null;
-        }
+        // アニメーターの仕様上1フレーム遅らせなければいけない
+        yield return null;
+        animator.SetBool("isWest", false);
+        audioSource.Play();
+        animationType = AnimationType.Idle;
+        var pos = transform.position;
+        pos.x -= 1.0f;
+        transform.position = pos;
     }
 
-    IEnumerator StartNorthAnimation()
+    // アニメーション終了時に呼び出される
+    IEnumerator OnNorthAnimationExit()
     {
-        animationType = AnimationType.North;
-        animator.SetBool("isNorth", true);
-        while (true)
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-            {
-                animator.SetBool("isNorth", false);
-                animationType = AnimationType.Idle;
-                var pos = transform.position;
-                pos.z += 1.0f;
-                transform.position = pos;
-                yield break;
-            }
-            yield return null;
-        }
+        // アニメーターの仕様上1フレーム遅らせなければいけない
+        yield return null;
+        animator.SetBool("isNorth", false);
+        audioSource.Play();
+        animationType = AnimationType.Idle;
+        var pos = transform.position;
+        pos.z += 1.0f;
+        transform.position = pos;
     }
 
-    IEnumerator StartSouthAnimation()
+    // アニメーション終了時に呼び出される
+    IEnumerator OnSouthAnimationExit()
     {
-        animationType = AnimationType.South;
-        animator.SetBool("isSouth", true);
-        while (true)
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-            {
-                animator.SetBool("isSouth", false);
-                animationType = AnimationType.Idle;
-                var pos = transform.position;
-                pos.z -= 1.0f;
-                transform.position = pos;
-                yield break;
-            }
-            yield return null;
-        }
+        // アニメーターの仕様上1フレーム遅らせなければいけない
+        yield return null;
+        animator.SetBool("isSouth", false);
+        audioSource.Play();
+        animationType = AnimationType.Idle;
+        var pos = transform.position;
+        pos.z -= 1.0f;
+        transform.position = pos;
     }
 }
