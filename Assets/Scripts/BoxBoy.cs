@@ -4,47 +4,107 @@ using UnityEngine;
 
 public class BoxBoy : MonoBehaviour
 {
-    static readonly Vector3 AxisPositionEast = new Vector3(0.5f, 0.5f, 0.0f); // 東
-    static readonly Vector3 AxisPositionWest = new Vector3(-0.5f, 0.5f, 0.0f); // 西
-    static readonly Vector3 AxisPositionSouth = new Vector3(0.0f, 0.5f, -0.5f); // 南
-    static readonly Vector3 AxisPositionNorth = new Vector3(0.0f, 0.5f, 0.5f); // 北
-
-    [SerializeField] Transform axisTransform;
-    [SerializeField] Transform boxTransform;
-
-
-    float prevRotateZ = 0.0f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    [SerializeField] Animator animator;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-
-            StartCoroutine(RotationCor());
+            StartCoroutine(StartEastAnimation());
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            StartCoroutine(StartWestAnimation());
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            StartCoroutine(StartNorthAnimation());
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            StartCoroutine(StartSouthAnimation());
         }
     }
 
-    IEnumerator RotationCor()
+    // ↓ボタンを連打するとアニメーターが死ぬバグが存在
+
+    IEnumerator StartEastAnimation()
     {
-        prevRotateZ = axisTransform.rotation.z;
-        while (true) 
+        if (animator.GetBool("isEast"))
         {
-            var rotate = axisTransform.rotation;
-            rotate.z += -0.01f;
-            axisTransform.rotation = rotate;
-            if (axisTransform.rotation.z < prevRotateZ - 90.0f)
+            yield break;
+        }
+        animator.SetBool("isEast", true);
+        while (true)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                var pos = boxTransform.transform.position;
-                pos.x += -1.0f;
-                boxTransform.transform.position = pos;
-                pos.x += 2.0f;
-                axisTransform.transform.position = pos;
+                animator.SetBool("isEast", false);
+                var pos = transform.position;
+                pos.x += 1.0f;
+                transform.position = pos;
+                yield break;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator StartWestAnimation()
+    {
+        if (animator.GetBool("isWest"))
+        {
+            yield break;
+        }
+        animator.SetBool("isWest", true);
+        while (true)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            {
+                animator.SetBool("isWest", false);
+                var pos = transform.position;
+                pos.x -= 1.0f;
+                transform.position = pos;
+                yield break;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator StartNorthAnimation()
+    {
+        if (animator.GetBool("isNorth"))
+        {
+            yield break;
+        }
+        animator.SetBool("isNorth", true);
+        while (true)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            {
+                animator.SetBool("isNorth", false);
+                var pos = transform.position;
+                pos.z += 1.0f;
+                transform.position = pos;
+                yield break;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator StartSouthAnimation()
+    {
+        if (animator.GetBool("isSouth"))
+        {
+            yield break;
+        }
+        animator.SetBool("isSouth", true);
+        while (true)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            {
+                animator.SetBool("isSouth", false);
+                var pos = transform.position;
+                pos.z -= 1.0f;
+                transform.position = pos;
                 yield break;
             }
             yield return null;
