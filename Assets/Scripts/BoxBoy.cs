@@ -5,40 +5,57 @@ using UnityEngine;
 public class BoxBoy : MonoBehaviour
 {
     [SerializeField] Animator animator;
+
+    enum AnimationType
+    {
+        East,
+        West,
+        North,
+        South,
+        Idle
+    }
+
+    AnimationType animationType = AnimationType.Idle;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (animationType != AnimationType.Idle)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             StartCoroutine(StartEastAnimation());
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             StartCoroutine(StartWestAnimation());
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             StartCoroutine(StartNorthAnimation());
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
             StartCoroutine(StartSouthAnimation());
+            return;
         }
     }
 
-    // ↓ボタンを連打するとアニメーターが死ぬバグが存在
-
     IEnumerator StartEastAnimation()
     {
-        if (animator.GetBool("isEast"))
-        {
-            yield break;
-        }
+        animationType = AnimationType.East;
         animator.SetBool("isEast", true);
         while (true)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
                 animator.SetBool("isEast", false);
+                animationType = AnimationType.Idle;
                 var pos = transform.position;
                 pos.x += 1.0f;
                 transform.position = pos;
@@ -50,16 +67,14 @@ public class BoxBoy : MonoBehaviour
 
     IEnumerator StartWestAnimation()
     {
-        if (animator.GetBool("isWest"))
-        {
-            yield break;
-        }
+        animationType = AnimationType.West;
         animator.SetBool("isWest", true);
         while (true)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
                 animator.SetBool("isWest", false);
+                animationType = AnimationType.Idle;
                 var pos = transform.position;
                 pos.x -= 1.0f;
                 transform.position = pos;
@@ -71,16 +86,14 @@ public class BoxBoy : MonoBehaviour
 
     IEnumerator StartNorthAnimation()
     {
-        if (animator.GetBool("isNorth"))
-        {
-            yield break;
-        }
+        animationType = AnimationType.North;
         animator.SetBool("isNorth", true);
         while (true)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
                 animator.SetBool("isNorth", false);
+                animationType = AnimationType.Idle;
                 var pos = transform.position;
                 pos.z += 1.0f;
                 transform.position = pos;
@@ -92,16 +105,14 @@ public class BoxBoy : MonoBehaviour
 
     IEnumerator StartSouthAnimation()
     {
-        if (animator.GetBool("isSouth"))
-        {
-            yield break;
-        }
+        animationType = AnimationType.South;
         animator.SetBool("isSouth", true);
         while (true)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
                 animator.SetBool("isSouth", false);
+                animationType = AnimationType.Idle;
                 var pos = transform.position;
                 pos.z -= 1.0f;
                 transform.position = pos;
